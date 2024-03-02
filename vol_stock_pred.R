@@ -78,16 +78,14 @@ GetDiffDays <- function(objDF,days=c(10), offLimitsSymbols=c('outcome'), roundBy
   return (objDF)
 }
 
-# call the function with the following differences
 nasdaq100 <- GetDiffDays(nasdaq100, days=c(1,2,3,4,5,10,20), offLimitsSymbols=c('outcome'), roundByScaler=2)
 
-# drop most recent entry as we don't have an outcome
+# droping the most recent entry as it has no outcome
 nasdaq100 <- nasdaq100[2:nrow(nasdaq100),]
 
-# take a peek at YHOO features:
 dput(names(nasdaq100)[grepl('AAPL.',names(nasdaq100))])
 
-# well use POSIXlt to add day of the week, day of the month, day of the year
+# using POSIXlt to add day of the week, day of the month, day of the year
 nasdaq100$wday <- as.POSIXlt(nasdaq100$date)$wday
 nasdaq100$yday <- as.POSIXlt(nasdaq100$date)$mday
 nasdaq100$mon<- as.POSIXlt(nasdaq100$date)$mon
@@ -96,7 +94,7 @@ nasdaq100$mon<- as.POSIXlt(nasdaq100$date)$mon
 nasdaq100 <- subset(nasdaq100, select=-c(date))
 #nasdaq100 <- nasdaq100[sample(nrow(nasdaq100)),]
 
-# let's model
+
 #install.packages("caret")
 library(caret)
 predictorNames <- names(nasdaq100)[names(nasdaq100) != 'outcome']
